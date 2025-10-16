@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Platform Administration Console</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <section id="login-view" class="card card--centered">
+        <h1 class="app-title">Platform Administration</h1>
+        <p class="app-subtitle">
+          Secure access for platform administrators to manage users, courses, and
+          system health.
+        </p>
+        <form id="admin-login-form" class="form form--login">
+          <label for="admin-login-code" class="form__label">Access code</label>
+          <input
+            id="admin-login-code"
+            name="accessCode"
+            type="password"
+            autocomplete="off"
+            class="form__input"
+            placeholder="Enter administrator access code"
+            required
+          />
+          <p id="login-error" class="form__error" role="alert" aria-live="assertive"></p>
+          <button type="submit" class="button button--primary">Sign in</button>
+        </form>
+        <p class="app-disclaimer">
+          Administrative access is monitored. Unauthorised attempts are logged
+          and reported.
+        </p>
+      </section>
+
+      <div id="admin-view" class="hidden">
+        <header class="admin-header">
+          <div>
+            <h1 class="admin-header__title">Administration Console</h1>
+            <p class="admin-header__subtitle">
+              Manage people, courses, policies, and observe platform health in
+              real time.
+            </p>
+          </div>
+          <div class="admin-header__meta">
+            <div class="admin-meta__user" aria-live="polite">
+              Signed in as <span id="admin-name">Administrator</span>
+            </div>
+            <button id="sign-out" class="button button--secondary">Sign out</button>
+          </div>
+        </header>
+
+        <section class="grid grid--metrics" aria-label="Platform metrics">
+          <div id="metrics-container" class="metrics"></div>
+        </section>
+
+        <main class="grid grid--layout">
+          <section class="card" aria-labelledby="health-title">
+            <div class="card__header">
+              <h2 id="health-title">System health checks</h2>
+              <button id="refresh-health" class="button button--ghost">Run health check</button>
+            </div>
+            <ul id="health-checks" class="health-list" aria-live="polite"></ul>
+          </section>
+
+          <section class="card" aria-labelledby="user-title">
+            <div class="card__header">
+              <h2 id="user-title">User management</h2>
+              <p class="card__subtitle">
+                Handle invitations, role updates, and teacher approvals.
+              </p>
+            </div>
+
+            <form id="invite-form" class="form form--inline">
+              <div class="form__field">
+                <label for="invite-email" class="form__label">Invite email</label>
+                <input id="invite-email" type="email" required class="form__input" placeholder="person@example.com" />
+              </div>
+              <div class="form__field">
+                <label for="invite-role" class="form__label">Role</label>
+                <select id="invite-role" class="form__input">
+                  <option value="member">Member</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="admin">Administrator</option>
+                </select>
+              </div>
+              <button type="submit" class="button button--primary">Send invite</button>
+            </form>
+
+            <div class="list" id="invite-list" aria-live="polite"></div>
+
+            <hr class="divider" />
+
+            <div class="list" id="user-list" aria-live="polite"></div>
+          </section>
+
+          <section class="card" aria-labelledby="course-title">
+            <div class="card__header">
+              <h2 id="course-title">Course management</h2>
+              <p class="card__subtitle">
+                Track courses, control enrolment status, and maintain catalogue
+                quality.
+              </p>
+            </div>
+
+            <form id="course-form" class="form">
+              <div class="form__row">
+                <div class="form__field">
+                  <label for="course-title-input" class="form__label">Course title</label>
+                  <input id="course-title-input" type="text" required class="form__input" placeholder="e.g. Advanced Design Systems" />
+                </div>
+                <div class="form__field">
+                  <label for="course-owner-input" class="form__label">Course lead</label>
+                  <input id="course-owner-input" type="text" required class="form__input" placeholder="Instructor name" />
+                </div>
+              </div>
+              <div class="form__row">
+                <div class="form__field">
+                  <label for="course-capacity-input" class="form__label">Capacity</label>
+                  <input id="course-capacity-input" type="number" min="1" step="1" required class="form__input" placeholder="120" />
+                </div>
+                <div class="form__field">
+                  <label for="course-status-input" class="form__label">Initial status</label>
+                  <select id="course-status-input" class="form__input">
+                    <option value="pending">Pending</option>
+                    <option value="active">Active</option>
+                    <option value="archived">Archived</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="button button--primary">Add course</button>
+            </form>
+
+            <div id="course-list" class="list" aria-live="polite"></div>
+          </section>
+
+          <section class="card" aria-labelledby="settings-title">
+            <div class="card__header">
+              <h2 id="settings-title">Global settings</h2>
+              <p class="card__subtitle">Adjust platform-wide policies and safeguards.</p>
+            </div>
+
+            <form id="settings-form" class="form form--stacked">
+              <label class="checkbox">
+                <input id="setting-maintenance" type="checkbox" />
+                <span>Enable maintenance mode</span>
+              </label>
+              <label class="checkbox">
+                <input id="setting-registration" type="checkbox" />
+                <span>Allow new registrations</span>
+              </label>
+              <label class="checkbox">
+                <input id="setting-2fa" type="checkbox" />
+                <span>Require multi-factor authentication for staff</span>
+              </label>
+              <div class="form__field">
+                <label for="setting-timeout" class="form__label">Session timeout (minutes)</label>
+                <input id="setting-timeout" type="number" min="5" step="5" class="form__input" />
+              </div>
+              <div class="form__field">
+                <label for="setting-rate-limit" class="form__label">Global action limit (per minute)</label>
+                <input id="setting-rate-limit" type="number" min="5" class="form__input" />
+              </div>
+              <button type="submit" class="button button--primary">Save changes</button>
+            </form>
+          </section>
+
+          <section class="card" aria-labelledby="audit-title">
+            <div class="card__header">
+              <div>
+                <h2 id="audit-title">Audit log</h2>
+                <p class="card__subtitle">
+                  Monitor administrative activity. Use search and filters to
+                  locate critical events.
+                </p>
+              </div>
+            </div>
+
+            <div class="toolbar">
+              <input id="audit-search" class="form__input" type="search" placeholder="Search audit events" aria-label="Search audit events" />
+              <select id="audit-filter" class="form__input" aria-label="Filter audit events by category">
+                <option value="all">All categories</option>
+                <option value="security">Security</option>
+                <option value="user-management">User management</option>
+                <option value="course-management">Course management</option>
+                <option value="settings">Settings</option>
+                <option value="health">Health</option>
+              </select>
+            </div>
+
+            <div id="audit-log" class="audit-log" aria-live="polite"></div>
+          </section>
+
+          <section class="card" aria-labelledby="activity-title">
+            <div class="card__header">
+              <h2 id="activity-title">Recent activity</h2>
+              <p class="card__subtitle">
+                A condensed history of the latest administrative actions.
+              </p>
+            </div>
+            <ol id="activity-history" class="activity-history" aria-live="polite"></ol>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div id="modal-root" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-message">
+      <div class="modal__container">
+        <h2 id="modal-title" class="modal__title"></h2>
+        <p id="modal-message" class="modal__message"></p>
+        <div class="modal__actions">
+          <button id="modal-cancel" class="button button--ghost">Cancel</button>
+          <button id="modal-confirm" class="button button--danger">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
