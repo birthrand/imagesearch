@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --background: 0 0% 100%;
+    --foreground: 224 71% 4%;
+
+    --primary: 262 83% 62%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 262 100% 97%;
+    --secondary-foreground: 262 83% 32%;
+
+    --surface: 256 39% 96%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 225 12% 47%;
+
+    --accent: 165 77% 41%;
+    --accent-foreground: 166 76% 15%;
+
+    --border: 222 14% 85%;
+    --input: 214 32% 91%;
+    --ring: 262 83% 62%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --background: 224 71% 4%;
+    --foreground: 210 20% 98%;
+
+    --primary: 265 92% 76%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 266 43% 18%;
+    --secondary-foreground: 266 100% 95%;
+
+    --surface: 242 33% 14%;
+
+    --muted: 217 19% 24%;
+    --muted-foreground: 215 20% 80%;
+
+    --accent: 160 84% 67%;
+    --accent-foreground: 160 85% 14%;
+
+    --border: 217 19% 24%;
+    --input: 217 19% 24%;
+    --ring: 265 92% 76%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  a {
+    @apply transition-colors;
+  }
+}
